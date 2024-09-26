@@ -57,4 +57,8 @@ class User < ActiveRecord::Base
   def last4
     default_card[:last4] if default_card
   end
+
+  def donated?
+      self.payments.length > 0
+  end
 end

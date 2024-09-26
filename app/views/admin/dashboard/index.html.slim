@@ -10,28 +10,22 @@
               .twelve.columns.centered.centalign
                 ul.tab-nav
                   li#grants
-                    a href="#"  Grants
+                    a href="#"  Grants & Teachers
                   li#donors
                     a href="#"  Donors
-                  li#recipients
-                    a href="#"  Recipients
                   li#distributions
                     a href="#"  Data Distributions
             .tab-content
               = datagrid_form_for @grant_report, :url => admin_dashboard_path
               = datagrid_table(@grant_report)
               = will_paginate @grant_report.assets
-              .large.primary.btn.centered.columns.three
-                = link_to "Get Grant CSV", url_for(format: 'csv', grant_report: params[:grant_report])
+              .large.primary.btn.centered.columns.four
+                = link_to "Download CSV", url_for(format: 'csv', grant_report: params[:grant_report], csv_type: "grant")
             .tab-content
-              = render 'donated'
-              = render partial: 'shared/table', locals: { heads: %w[Name Email], partials: [['users', @donors, :user, "There are no users"]] }
-              .ten.columns.centered.centalign
-                = will_paginate @donors
-            .tab-content
-              = render 'school'
-              = render partial: 'shared/table', locals: { heads: %w[Name Email], partials: [['users', @recipients, :user, "There are no recipients"]] }
-              .ten.columns.centered.centalign
-                = will_paginate @recipients
+              = datagrid_form_for @donor_report, :url => admin_dashboard_path
+              = datagrid_table(@donor_report)
+              = will_paginate @donor_report.assets
+              .large.primary.btn.centered.columns.four
+                = link_to "Download CSV", url_for(format: 'csv', donor_report: params[:donor_report], csv_type: "donor")
             .tab-content data-bp-get='/admin/load_distributions'
               #distributions-tab

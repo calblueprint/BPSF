@@ -12,55 +12,34 @@ class Admin::DashboardController < ApplicationController
     @grant_report = GrantReport.new(params[:grant_report])
     respond_to do |f|
       f.html do
-        @grant_report.scope {|scope| scope.page(params[:page]) }
+        @grant_report.scope {|scope| scope.page(params[:page]).per_page(25)}
       end
       f.csv do
-        send_data @grant_report.to_csv,
-          type: "text/csv",
-          disposition: 'inline',
-          filename: "grant-report-#{Time.now.to_s}.csv"
+        if params[:csv_type] == "grant"
+          send_data @grant_report.to_csv,
+            type: "text/csv",
+            disposition: 'inline',
+            filename: "grant-report-#{Time.now.to_s}.csv"
+        end
       end
     end
-    order = params[:order]
-    if order && order == 'Status'
-      @grants.sort_by! {|g| [g.order_status, g.title]}
-    elsif order && order == 'Title'
-      @grants.sort_by! {|g| g.title}
-    elsif order && order == 'Last Created Date'
-      @grants.sort_by! {|g| g.created_at}.reverse!
-    elsif order && order == 'Last Updated Date'
-      @grants.sort_by! {|g| g.updated_at}.reverse!
-    end
 
-    @donors = User.donors
-    donated = params[:donated]
-    if donated && donated == 'Donated'
-      @donors = User.donors.select {|user| user.payments.length > 0}
-    elsif donated && donated == 'Have Not Donated'
-      @donors = User.donors.select {|user| user.payments.length == 0}
-    end
-    @donors.sort_by! {|u| [u.last_name, u.first_name]}
-    @donors = @donors.paginate page: params[:page], per_page: 6
-
-    @recipients = Recipient.all
-    school = params[:school]
-    if school && school != 'All'
-      schoolId = School.find_by_name(school).id
-      @recipients = Recipient.select {|recip| recip.profile.school_id == schoolId }
-    end
-    @recipients.sort_by! {|u| [u.last_name, u.first_name]}
-    @recipients = @recipients.paginate page: params[:page], per_page: 6
-
-  end
-
-  def grant_event
-    @grant = Grant.find params[:id]
-    @grant.send params[:state]
-    respond_to do |format|
-      format.html { redirect_to admin_dashboard_path }
-      format.js
+    @donor_report = DonorReport.new(params[:donor_report])
+    respond_to do |f|
+      f.html do
+        @donor_report.scope {|scope| scope.page(params[:page]).per_page(25)}
+      end
+      f.csv do
+        if params[:csv_type] == "donor"
+          send_data @donor_report.to_csv,
+          type: "text/csv",
+          disposition: 'inline',
+          filename: "donor-report-#{Time.now.to_s}.csv"
+        end
+      end
     end
   end
+
 
   def load_distributions
     @successful = successful

@@ -14,7 +14,7 @@ var customSelect = {
                         newSelect = me.createSelect(oldSelect);
 
                     oldSelect.className = 'hide';
-                    scope.appendChild(newSelect);
+                    scope.insertBefore(newSelect, oldSelect);
                     me.manageSelect(newSelect, oldSelect);
 
                 })();

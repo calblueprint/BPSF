@@ -16,11 +16,12 @@
 .datagrid-filter {
   width: 80%;
   .select-wrapper {
-    margin-left: 10px;
-    &:nth-of-type(1) {
+    margin-right: 10px;
+    &:nth-of-type(2) {
       width: 10%;
     }
   }
+  margin-bottom: 20px;
 }
 
 .datagrid-filter, .select-wrapper, .datagrid-submit, .datagrid-actions, .order {
@@ -53,3 +54,21 @@
   margin-left: 5px;
 }
 
+.separator {
+  font-size: 40px;
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+.date_filter {
+  width: 25%;
+  padding: 12px 10px;
+  font-size: 12pt;
+  background-color: #fff;
+  border-radius: 5px;
+  border: solid 1px #999999;
+}
+
+.datagrid-filter .select-wrapper {
+  height: 44px;
+}
